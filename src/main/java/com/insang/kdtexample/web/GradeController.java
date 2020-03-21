@@ -41,11 +41,14 @@ public class GradeController {
 
 	@RequestMapping(value="/edit", method=RequestMethod.GET)
 	public ModelAndView edit(@RequestParam Long id, ModelAndView mav){
-		System.out.println("******"+id+"*****");
 		Student student = studentService.find(id);
-		
-		mav.setViewName("edit");
-		mav.addObject("student", student);
+		if (student == null)
+			new ModelAndView("redirect:/");
+		else {
+			mav.setViewName("edit");
+			mav.addObject("student", student);
+		}
+		;
 		return mav;
 	}
 	

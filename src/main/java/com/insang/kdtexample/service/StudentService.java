@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.insang.kdtexample.domain.Grade;
 import com.insang.kdtexample.domain.Student;
 import com.insang.kdtexample.repository.StudentRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StudentService {
@@ -19,6 +20,7 @@ public class StudentService {
 	@Autowired
 	private StudentRepository studentRepository;
 
+	@Transactional
 	public Student addStudentGrade(Student student) {
 		computeGrade(student);
 		Student created = studentRepository.saveAndFlush(student);
@@ -46,11 +48,13 @@ public class StudentService {
 		
 	}
 
+	@Transactional
 	public List<Student> findAll() {
 		// TODO Auto-generated method stub
 		return studentRepository.findAll();
 	}
 
+	@Transactional
 	public Student find(Long id) {
 		Optional<Student> student = studentRepository.findById(id);
 		Student s;
@@ -60,9 +64,12 @@ public class StudentService {
 			
 		return s;
 	}
-	
+
+	@Transactional
 	public void deleteStudentGrade(Long id) {
-		studentRepository.deleteById(id);
+		Student student = find(id);
+		if (student != null)
+			studentRepository.deleteById(id);
 	}
 
 	public void deleteAll() {
